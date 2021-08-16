@@ -1,4 +1,4 @@
-package tabuleirochess;
+package tabuleirogame;
 
 public class TabuleiroException extends RuntimeException {
 

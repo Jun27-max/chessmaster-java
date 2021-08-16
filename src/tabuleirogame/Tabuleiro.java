@@ -1,4 +1,4 @@
-package tabuleirochess;
+package tabuleirogame;
 
 public class Tabuleiro {
 
@@ -44,7 +44,20 @@ public class Tabuleiro {
 			throw new TabuleiroException("Já existe uma peça na posição" + pos);
 		}
 		pecas[pos.getLinha()][pos.getColuna()] = peca;
-		peca.pos = pos;
+		peca.position = pos;
+	}
+	
+	public Peca removePeca(Posicao pos) {
+		if(!posicaoExiste(pos)) {
+			throw new TabuleiroException("Posição não está no tabuleiro");
+		}
+		if(peca(pos) == null) {
+			return null;
+		}
+		Peca aux = peca(pos);
+		aux.position = null;
+		pecas[pos.getLinha()][pos.getColuna()] = null;
+		return aux;
 	}
 
 	private boolean positionExists(int linha, int coluna) {

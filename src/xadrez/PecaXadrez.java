@@ -1,9 +1,10 @@
 package xadrez;
 
-import tabuleirochess.Peca;
-import tabuleirochess.Tabuleiro;
+import tabuleirogame.Peca;
+import tabuleirogame.Posicao;
+import tabuleirogame.Tabuleiro;
 
-public class PecaXadrez extends Peca {
+public abstract class PecaXadrez extends Peca {
 
 	private Color color;
 
@@ -14,6 +15,11 @@ public class PecaXadrez extends Peca {
 
 	public Color getColor() {
 		return color;
+	}
+	
+	protected boolean isOponentPeça(Posicao posicao) {
+		PecaXadrez p = (PecaXadrez)getTab().peca(posicao);
+		return p != null && p.getColor() != color;
 	}
 
 }

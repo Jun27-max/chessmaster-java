@@ -1,4 +1,4 @@
-package tabuleirochess;
+package tabuleirogame;
 
 public class Posicao {
 	
@@ -23,6 +23,11 @@ public class Posicao {
 	}
 
 	public void setColuna(int coluna) {
+		this.coluna = coluna;
+	}
+	
+	public void setValues(int linha, int coluna) {
+		this.linha = linha;
 		this.coluna = coluna;
 	}
 
