@@ -1,5 +1,6 @@
 package xadrez;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class Partida {
 	private boolean check;
 	private boolean checkMate;
 	private PecaXadrez enPassant;
+	private PecaXadrez promoted;
 
 	private List<Peca> pecasNoTabuleiro;
 	private List<Peca> pecasCapturadas;
@@ -55,6 +57,10 @@ public class Partida {
 		return enPassant;
 	}
 
+	public PecaXadrez getPromoted() {
+		return promoted;
+	}
+
 	public PecaXadrez[][] getPecas() {
 		PecaXadrez[][] mat = new PecaXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 		for (int i = 0; i < tabuleiro.getLinhas(); i++) {
@@ -85,6 +91,17 @@ public class Partida {
 
 		PecaXadrez moved = (PecaXadrez) tabuleiro.peca(targ);
 
+		// Promoção
+
+		promoted = null;
+		if (moved instanceof Peao) {
+			if ((moved.getColor() == Color.BRANCO && targ.getLinha() == 0)
+					|| (moved.getColor() == Color.PRETO && targ.getLinha() == 7)) {
+				promoted = (PecaXadrez)tabuleiro.peca(targ);
+				promoted = replacePromotedPeca("r");
+			}
+		}
+
 		check = (testCheck(oponente(currentPlayer))) ? true : false;
 
 		if (testCheckMate(oponente(currentPlayer))) {
@@ -102,6 +119,33 @@ public class Partida {
 		}
 
 		return (PecaXadrez) captura;
+	}
+
+	public PecaXadrez replacePromotedPeca(String type) {
+		if (promoted == null) {
+			throw new IllegalStateException("Não há peça para ser promovida. ");
+		}
+		if (!type.equals("B")&&!type.equals("C")&&!type.equals("T")&&!type.equals("r")) {
+			throw new InvalidParameterException("Tipo inválido para promoção.");
+		}
+		
+		Posicao pos = promoted.getXadrezPosicao().paraPosicao();
+		Peca p = tabuleiro.removePeca(pos);
+		pecasNoTabuleiro.remove(p);
+		
+		PecaXadrez novaPeca = newPeca(type, promoted.getColor());
+		tabuleiro.lugarPeca(novaPeca, pos);
+		pecasNoTabuleiro.add(novaPeca);
+		
+		return novaPeca;
+	}
+
+	private PecaXadrez newPeca(String type, Color color) {
+		if (type.equals("B")) return new Bispo(tabuleiro, color);
+		if (type.equals("C")) return new Cavalo(tabuleiro, color);
+		if (type.equals("T")) return new Torre(tabuleiro, color);
+		return new Rainha(tabuleiro, color);
+		
 	}
 
 	private Peca makeMove(Posicao busca, Posicao target) {
