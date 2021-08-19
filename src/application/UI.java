@@ -54,7 +54,19 @@ public class UI {
 		printCapturaPecas(captura);
 		System.out.println();
 		System.out.println("Turn : " + partida.getTurn());
+		if(!partida.isCheckMate()) {
+			System.out.println("CHECK");
+		}
+		else {
+			System.out.println("CHECKMATE");
+			System.out.println("Vencedor: "+ partida.getCurrent());
+			
+		}
+		
 		System.out.println("Esperando jogador: " + partida.getCurrent());
+		if (partida.isCheck()) {
+			System.out.println("CHECK!");
+		}
 	}
 
 	public static void printTabuleiro(PecaXadrez[][] pecas) {
