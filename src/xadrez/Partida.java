@@ -89,7 +89,7 @@ public class Partida {
 	}
 
 	private Peca makeMove(Posicao busca, Posicao target) {
-		PecaXadrez p = (PecaXadrez)tabuleiro.removePeca(busca);
+		PecaXadrez p = (PecaXadrez) tabuleiro.removePeca(busca);
 		p.increaseMoveCount();
 		Peca captured = tabuleiro.removePeca(target);
 		tabuleiro.lugarPeca(p, target);
@@ -99,11 +99,29 @@ public class Partida {
 			pecasCapturadas.add(captured);
 		}
 
+		// Roque Pequeno
+		if (p instanceof Rei && target.getColuna() == busca.getColuna() + 2) {
+			Posicao buscaOrigin = new Posicao(busca.getLinha(), busca.getColuna() + 3);
+			Posicao targetDestin = new Posicao(busca.getLinha(), busca.getColuna() + 1);
+			PecaXadrez rook = (PecaXadrez) tabuleiro.removePeca(buscaOrigin);
+			tabuleiro.lugarPeca(rook, targetDestin);
+			rook.increaseMoveCount();
+		}
+
+		// Roque Grande
+		if (p instanceof Rei && target.getColuna() == busca.getColuna() - 2) {
+			Posicao buscaOrigin = new Posicao(busca.getLinha(), busca.getColuna() - 4);
+			Posicao targetDestin = new Posicao(busca.getLinha(), busca.getColuna() - 1);
+			PecaXadrez rook = (PecaXadrez) tabuleiro.removePeca(buscaOrigin);
+			tabuleiro.lugarPeca(rook, targetDestin);
+			rook.increaseMoveCount();
+		}
+
 		return captured;
 	}
 
 	private void undoMove(Posicao busca, Posicao target, Peca captured) {
-		PecaXadrez p = (PecaXadrez)tabuleiro.removePeca(target);
+		PecaXadrez p = (PecaXadrez) tabuleiro.removePeca(target);
 		p.decreaseMoveCount();
 		tabuleiro.lugarPeca(p, busca);
 
@@ -111,6 +129,24 @@ public class Partida {
 			tabuleiro.lugarPeca(captured, target);
 			pecasCapturadas.remove(captured);
 			pecasNoTabuleiro.add(captured);
+		}
+
+		// Roque Pequeno
+		if (p instanceof Rei && target.getColuna() == busca.getColuna() + 2) {
+			Posicao buscaOrigin = new Posicao(busca.getLinha(), busca.getColuna() + 3);
+			Posicao targetDestin = new Posicao(busca.getLinha(), busca.getColuna() + 1);
+			PecaXadrez rook = (PecaXadrez) tabuleiro.removePeca(targetDestin);
+			tabuleiro.lugarPeca(rook, buscaOrigin);
+			rook.decreaseMoveCount();
+		}
+
+		// Roque Grande
+		if (p instanceof Rei && target.getColuna() == busca.getColuna() - 2) {
+			Posicao buscaOrigin = new Posicao(busca.getLinha(), busca.getColuna() - 4);
+			Posicao targetDestin = new Posicao(busca.getLinha(), busca.getColuna() - 1);
+			PecaXadrez rook = (PecaXadrez) tabuleiro.removePeca(targetDestin);
+			tabuleiro.lugarPeca(rook, buscaOrigin);
+			rook.decreaseMoveCount();
 		}
 
 	}
@@ -203,36 +239,36 @@ public class Partida {
 		lugarNovaPeca('b', 1, new Cavalo(tabuleiro, Color.BRANCO));
 		lugarNovaPeca('c', 1, new Bispo(tabuleiro, Color.BRANCO));
 		lugarNovaPeca('d', 1, new Rainha(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('e', 1, new Rei(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('f', 1, new Bispo(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('g', 1, new Cavalo(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('h', 1, new Torre(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('a', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('b', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('c', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('d', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('e', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('f', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('g', 2, new Peao(tabuleiro, Color.BRANCO));
-        lugarNovaPeca('h', 2, new Peao(tabuleiro, Color.BRANCO));
-                                       
-        lugarNovaPeca('a', 8, new Torre(tabuleiro, Color.PRETO));
-        lugarNovaPeca('b', 8, new Cavalo(tabuleiro, Color.PRETO));
-        lugarNovaPeca('c', 8, new Bispo(tabuleiro, Color.PRETO));
-        lugarNovaPeca('d', 8, new Rainha(tabuleiro, Color.PRETO));
-        lugarNovaPeca('e', 8, new Rei(tabuleiro, Color.PRETO));
-        lugarNovaPeca('f', 8, new Bispo(tabuleiro, Color.PRETO));
-        lugarNovaPeca('g', 8, new Cavalo(tabuleiro, Color.PRETO));
-        lugarNovaPeca('h', 8, new Torre(tabuleiro, Color.PRETO));
-        lugarNovaPeca('a', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('b', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('c', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('d', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('e', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('f', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('g', 7, new Peao(tabuleiro, Color.PRETO));
-        lugarNovaPeca('h', 7, new Peao(tabuleiro, Color.PRETO));
-                                                      
+		lugarNovaPeca('e', 1, new Rei(tabuleiro, Color.BRANCO, this));
+		lugarNovaPeca('f', 1, new Bispo(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('g', 1, new Cavalo(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('h', 1, new Torre(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('a', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('b', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('c', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('d', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('e', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('f', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('g', 2, new Peao(tabuleiro, Color.BRANCO));
+		lugarNovaPeca('h', 2, new Peao(tabuleiro, Color.BRANCO));
+
+		lugarNovaPeca('a', 8, new Torre(tabuleiro, Color.PRETO));
+		lugarNovaPeca('b', 8, new Cavalo(tabuleiro, Color.PRETO));
+		lugarNovaPeca('c', 8, new Bispo(tabuleiro, Color.PRETO));
+		lugarNovaPeca('d', 8, new Rainha(tabuleiro, Color.PRETO));
+		lugarNovaPeca('e', 8, new Rei(tabuleiro, Color.PRETO, this));
+		lugarNovaPeca('f', 8, new Bispo(tabuleiro, Color.PRETO));
+		lugarNovaPeca('g', 8, new Cavalo(tabuleiro, Color.PRETO));
+		lugarNovaPeca('h', 8, new Torre(tabuleiro, Color.PRETO));
+		lugarNovaPeca('a', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('b', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('c', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('d', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('e', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('f', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('g', 7, new Peao(tabuleiro, Color.PRETO));
+		lugarNovaPeca('h', 7, new Peao(tabuleiro, Color.PRETO));
+
 	}
 
 }
