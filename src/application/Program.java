@@ -42,7 +42,11 @@ public class Program {
 				
 				if (partida.getPromoted() != null) {
 					System.out.println("Entra com a peça a ser promovida (B/C/T/r)");
-					String type = sc.nextLine();
+					String type = sc.nextLine().toUpperCase();
+					while (!type.equals("B")&&!type.equals("C")&&!type.equals("T")&&!type.equals("r")) {
+						System.out.println("Valor inválido. Entra com a peça a ser promovida (B/C/T/r)");
+						type = sc.nextLine().toUpperCase();
+					}
 					partida.replacePromotedPeca(type);
 				}
 			} 
